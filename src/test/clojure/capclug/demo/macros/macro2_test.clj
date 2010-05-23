@@ -2,6 +2,8 @@
   (:use clojure.test)
   (:use capclug.demo.macros.macro2))
 
+; similar to macro1 tests, but these test for dropped metadata.... 
+
 ; go from
 ;
 ; (println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"])
