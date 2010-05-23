@@ -1,16 +1,22 @@
-(ns capclug.demo.macros.macro1)
+(ns capclug.demo.macros.macro2)
 
-; let's just call all my macros 'marco' b/c I type that anyway....
+
 (defmacro marco-evens [& clauses]
   "calls the function only passing in the even arguments."
-  `(~@(for [index (range (count clauses)) :when (even? index)]
-    (nth clauses index))))
+  `(~@(for [index# (range (count clauses)) :when (even? index#)]
+    (let [item# (nth clauses index#) meta# (meta item#)] 
+      (if meta# 
+        (with-meta item# meta#)
+        item#)))))
 
 (defmacro marco-odds [function-name & clauses]
   "calls the function only passing in the odd arguments."
   `(~function-name
-    ~@(for [index (range (count clauses)) :when (even? index)]
-        (nth clauses index))))
+    ~@(for [index# (range (count clauses)) :when (even? index#)]
+    (let [item# (nth clauses index#) meta# (meta item#)] 
+      (if meta# 
+        (with-meta item# meta#)
+        item#)))))
 
 (defmacro marco-odds2 [function-name & clauses]
   "calls the function only passing in the odd arguments.
