@@ -6,7 +6,7 @@ https://docs.google.com/present/edit?id=0AWA9IUA1REQAZGc2d2d6Ml8xM25oZ2Q2cGRk&hl
 The challenges are:
 
 1)Write a macro that calls uses the first parameter as the function name and 
-then calls only the even numbered remaining parameters.
+then passes only the even numbered remaining parameters.
 
 Example:
                             1   2    3    4    5
@@ -16,7 +16,7 @@ would expand to
 
 (function-name arg1 arg3)
 
-2) Same thing, but only the odd parameters.
+2) Same thing as number one, but only the odd parameters.
 
 Example:
                             1   2    3    4    5
