@@ -1,5 +1,8 @@
 Unit tests (and answers) for three challenges that are part of a presentation.
 
+The presentation "Macros 101" can be found at:
+https://docs.google.com/present/edit?id=0AWA9IUA1REQAZGc2d2d6Ml8xM25oZ2Q2cGRk&hl=en
+
 The challenges are:
 
 1)Write a macro that calls uses the first parameter as the function name and 
