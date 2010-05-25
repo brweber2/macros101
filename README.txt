@@ -1,20 +1,27 @@
-(odds println \a 1 (+ 2 3) "foo" [1 3 2])
+Unit tests (and answers) for three challenges that are part of a presentation.
 
-should expand to
+The challenges are:
 
-(println a 5 [1 3 2])
+1)Write a macro that calls uses the first parameter as the function name and 
+then calls only the even numbered remaining parameters.
 
-(lazy-odds println \a 1 (+ 2 3) "foo" [1 3 2])
+Example:
+                            1   2    3    4    5
+(macro-name function-name arg0 arg1 arg2 arg3 arg4)
 
-should expand to
+would expand to
 
-(println a (+ 2 3) [1 3 2])
+(function-name arg1 arg3)
 
-IS THERE A DIFFERENCE???????
+2) Same thing, but only the odd parameters.
 
-(println "Hi")
-(println a nil [1 3 2])
+Example:
+                            1   2    3    4    5
+(macro-name function-name arg0 arg1 arg2 arg3 arg4)
 
-(println a (println "Hi") [1 3 2])
+would expand to
 
-ARE THEY THE SAME?????
+(function-name arg0 arg2 arg4)
+
+3) Write a macro that would cause a variable name collision (variable capture).  
+Show why gensym is necessary/helpful in Clojure (and still not perfect...).

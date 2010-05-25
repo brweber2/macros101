@@ -1,5 +1,9 @@
 (ns capclug.demo.macros.macro2)
 
+; let's just call all my macros 'marco' b/c I type that anyway....
+
+; these do the same thing as the macros in macro1.clj, except they also 
+; handle meta-data properly
 
 (defmacro marco-evens [& clauses]
   "calls the function only passing in the even arguments."

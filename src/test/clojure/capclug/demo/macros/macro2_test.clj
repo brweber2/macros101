@@ -2,17 +2,9 @@
   (:use clojure.test)
   (:use capclug.demo.macros.macro2))
 
-; similar to macro1 tests, but these test for dropped metadata.... 
+; similar to macro1 tests, but these test for dropped metadata....  
 
-; go from
-;
-; (println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"])
-;
-; to 
-;
-; (println 1 #^{:donkey "kong"} ["cheese" "doodles"])
-;
-; by keeping every other argument
+; utility code that we use to to verify equality with metadata
 
 (deftest meta-data-equality
   (is (= [1 2 3] #^{::donkey "kong"} [1 2 3])))
@@ -36,31 +28,47 @@
   (is (compare-list-with-metadata '(println 1 #^{::mm ::kay} [1 2]) '(println 1 #^{::mm ::kay} [1 2])))
   (is (false? (compare-list-with-metadata '(println 1 [1 2]) '(println 1 #^{::mm ::kay} [1 2])))))
 
+
+
+; 1) what we have
+;
+;           1 2    3                                4
+; (println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"])
+;
+; 2) what we want 
+;
+; (println 1 #^{:donkey "kong"} ["cheese" "doodles"])
+;
+; keep the even numbered arguments
+
 (deftest marco-evens-test
   (is (compare-list-with-metadata '(println 1 #^{:donkey "kong"} ["cheese" "doodles"]) (macroexpand '(marco-evens println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"]))))
   (is (not (compare-list-with-metadata '(println 1 #^{:donkey "shrek"} ["cheese" "doodles"]) (macroexpand '(marco-evens println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"])))))
   (is (not (compare-list-with-metadata '(println 1 ["cheese" "doodles"]) (macroexpand '(marco-evens println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"]))))))
 
-; go from
+; same test, but uses marco-evens2 which calls marco-odds
+(deftest marco-evens2-test
+  (is (compare-list-with-metadata '(println 1 #^{:donkey "kong"} ["cheese" "doodles"]) (macroexpand '(marco-evens2 println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"]))))
+  (is (not (compare-list-with-metadata '(println 1 #^{:donkey "shrek"} ["cheese" "doodles"]) (macroexpand '(marco-evens2 println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"])))))
+  (is (not (compare-list-with-metadata '(println 1 ["cheese" "doodles"]) (macroexpand '(marco-evens2 println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"]))))))
+
+; 1) what we have
 ;
+;           1 2    3                                4
 ; (println \a 1 #^{"a" "b"} (+ 2 3) ["cheese" "doodles"])
 ;
-; to
+; 2) what we want
 ;
 ; (println \a #^{"a" "b"} (+ 2 3))
 ;
-; by keeping the first item and then every other argument
+; keep the odd numbered arguments
 
 (deftest marco-odds-test
   (is (compare-list-with-metadata '(println \a (+ 2 3)) (macroexpand '(marco-odds println \a 1 (+ 2 3) ["cheese" "doodles"]))))
   (is (compare-list-with-metadata '(println \a #^{"a" "b"} (+ 2 3)) (macroexpand '(marco-odds println \a 1 #^{"a" "b"} (+ 2 3) ["cheese" "doodles"]))))
   (is (not (compare-list-with-metadata '(println \a (+ 2 3)) (macroexpand '(marco-odds println \a 1 #^{"a" "b"} (+ 2 3) ["cheese" "doodles"]))))))
 
-(deftest marco-evens2-test
-  (is (compare-list-with-metadata '(println 1 #^{:donkey "kong"} ["cheese" "doodles"]) (macroexpand '(marco-evens2 println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"]))))
-  (is (not (compare-list-with-metadata '(println 1 #^{:donkey "shrek"} ["cheese" "doodles"]) (macroexpand '(marco-evens2 println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"])))))
-  (is (not (compare-list-with-metadata '(println 1 ["cheese" "doodles"]) (macroexpand '(marco-evens2 println \a 1 (+ 2 3) #^{:donkey "kong"} ["cheese" "doodles"]))))))
-
+; same test, but uses marco-odds2 which calls marco-evens
 (deftest marco-odds2-test
   (is (compare-list-with-metadata '(println \a (+ 2 3)) (macroexpand '(marco-odds2 println \a 1 (+ 2 3) ["cheese" "doodles"]))))
   (is (compare-list-with-metadata '(println \a #^{"a" "b"} (+ 2 3)) (macroexpand '(marco-odds2 println \a 1 #^{"a" "b"} (+ 2 3) ["cheese" "doodles"]))))

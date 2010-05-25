@@ -1,6 +1,10 @@
 (ns capclug.demo.macros.macro1)
 
 ; let's just call all my macros 'marco' b/c I type that anyway....
+
+; note that these macros drop metadata
+; see macros2.clj for code that keeps the metadata intact
+
 (defmacro marco-evens [& clauses]
   "calls the function only passing in the even arguments."
   `(~@(for [index (range (count clauses)) :when (even? index)]
