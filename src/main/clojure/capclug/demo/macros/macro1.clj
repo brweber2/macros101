@@ -25,3 +25,11 @@
   "calls the function only passing in the even arguments.
   uses the odd macro for maximum code reuse."
   `(marco-odds ~(first clauses) ~@(rest (rest clauses)))) ; need to get rid of function name and first arg
+
+; here is an even better solution given by Mike Hogye at #capclug in May, 2010
+(defmacro pass-even-args [f & args]
+	`(~f ~@(take-nth 2 args)))
+
+
+(defmacro pass-odd-args [f & args]
+	`(~f ~@(take-nth 2 (drop 1 args))))
